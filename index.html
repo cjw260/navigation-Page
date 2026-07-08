@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<!-- 【SEO优化】：添加正确的语言标签，有助于搜索引擎定位受众 -->
+<html class="scroll-smooth" lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    
+    <!-- 【SEO优化】：更具描述性的 Title -->
+    <title>CAIN 的服务器门户 | 个人项目与作品集</title>
+    
+    <!-- 【视觉体验优化】：添加网站图标 (Favicon) -->
+    <link rel="icon" href="./assets/avatar.jpg" type="image/png">
+    <link rel="apple-touch-icon" href="./assets/favicon.png">
+    
+    <!-- 【SEO优化】：添加 Meta Description，这是搜索引擎结果页中显示在标题下方的摘要 -->
+    <meta name="description" content="欢迎来到 CAIN 的个人服务器门户。这里部署了我的独立开发项目、摄影作品与架构设计等在线应用。">
+    
+    <!-- 【SEO优化】：添加关键词 (虽然现代搜索引擎权重降低，但依然有辅助作用) -->
+    <meta name="keywords" content="CAIN, 个人服务器, 作品集, 全栈开发, 摄影, 独立项目, Nginx">
+    
+    <!-- 【SEO优化】：Open Graph 标签，让你把网址发给朋友或发到社交平台时，能显示漂亮的卡片预览 -->
+    <meta property="og:title" content="CAIN 的服务器门户">
+    <meta property="og:description" content="探索我的个人项目、在线应用与摄影作品集。">
+    <meta property="og:type" content="website">
+    <!-- 未来等你有域名了，可以把下面的 URL 换成你的真实域名 -->
+    <meta property="og:url" content="http://你的服务器IP/"> 
+    
+    <!-- 【SEO优化】：添加 canonical 标签，防止未来域名和 IP 同时存在导致搜索引擎认为内容重复 -->
+    <link rel="canonical" href="http://你的服务器IP/">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind Custom Configuration -->
+    <script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                  "surface-tint": "#5f5e5e",
+                  "surface-variant": "#e5e2de",
+                  "surface-bright": "#fcf9f5",
+                  "on-tertiary-fixed": "#1c1c19",
+                  "outline": "#747878",
+                  "background": "#fcf9f5",
+                  "on-surface-variant": "#444748",
+                  "surface-container-high": "#eae8e4",
+                  "on-tertiary-fixed-variant": "#474743",
+                  "on-primary": "#ffffff",
+                  "on-error": "#ffffff",
+                  "tertiary-container": "#1c1c19",
+                  "on-primary-container": "#858383",
+                  "surface-container-lowest": "#ffffff",
+                  "primary": "#000000",
+                  "surface-dim": "#dcdad6",
+                  "on-primary-fixed": "#1c1b1b",
+                  "on-tertiary": "#ffffff",
+                  "surface-container-highest": "#e5e2de",
+                  "on-primary-fixed-variant": "#474746",
+                  "surface-container": "#f0ede9",
+                  "on-tertiary-container": "#85847f",
+                  "on-error-container": "#93000a",
+                  "error-container": "#ffdad6",
+                  "tertiary": "#000000",
+                  "outline-variant": "#c4c7c7",
+                  "secondary-fixed": "#e3e2e0",
+                  "on-surface": "#1c1c1a",
+                  "tertiary-fixed-dim": "#c9c6c1",
+                  "on-secondary-fixed-variant": "#464746",
+                  "inverse-on-surface": "#f3f0ec",
+                  "primary-fixed-dim": "#c8c6c5",
+                  "on-secondary-fixed": "#1a1c1b",
+                  "inverse-surface": "#31302e",
+                  "secondary": "#5e5e5d",
+                  "secondary-fixed-dim": "#c7c6c5",
+                  "on-secondary-container": "#626361",
+                  "tertiary-fixed": "#e5e2dd",
+                  "primary-container": "#1c1b1b",
+                  "on-secondary": "#ffffff",
+                  "surface": "#fcf9f5",
+                  "surface-container-low": "#f6f3ef",
+                  "inverse-primary": "#c8c6c5",
+                  "primary-fixed": "#e5e2e1",
+                  "on-background": "#1c1c1a",
+                  "error": "#ba1a1a",
+                  "secondary-container": "#e0dfde"
+              },
+              borderRadius: {
+                  "DEFAULT": "0.125rem",
+                  "lg": "0.25rem",
+                  "xl": "0.5rem",
+                  "full": "0.75rem"
+              },
+              spacing: {
+                  "margin-mobile": "20px",
+                  "unit": "4px",
+                  "margin-desktop": "64px",
+                  "gutter": "24px",
+                  "container-max": "1280px"
+              },
+              fontFamily: {
+                  "display-lg": ["DM Sans"],
+                  "body-md": ["Hanken Grotesk"],
+                  "label-sm": ["Hanken Grotesk"],
+                  "headline-lg-mobile": ["DM Sans"],
+                  "headline-lg": ["DM Sans"],
+                  "body-lg": ["Hanken Grotesk"],
+                  "label-md": ["Hanken Grotesk"]
+              },
+              fontSize: {
+                  "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.03em", "fontWeight": "500" }],
+                  "body-md": ["16px", { "lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400" }],
+                  "label-sm": ["12px", { "lineHeight": "1", "letterSpacing": "0.03em", "fontWeight": "500" }],
+                  "headline-lg-mobile": ["24px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "500" }],
+                  "headline-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "500" }],
+                  "body-lg": ["18px", { "lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400" }],
+                  "label-md": ["14px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600" }]
+              }
+            }
+          }
+        }
+    </script>
+    
+    <!-- Custom Styles -->
+    <style>
+        body {
+            background-color: #fcf9f5;
+            color: #1c1c1a;
+        }
+
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in-up.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .project-card {
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #E5E2DD;
+            background: linear-gradient(180deg, rgba(255,255,255,0.8) 0%, rgba(245,245,245,0.4) 100%);
+            border-radius: 0.125rem;
+        }
+
+        .project-card-image-container {
+            overflow: hidden;
+            position: relative;
+        }
+
+        .project-card-image {
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .project-card:hover .project-card-image,
+        .project-card:active .project-card-image {
+            transform: scale(1.05);
+        }
+
+        .project-card-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .project-card:hover .project-card-overlay,
+        .project-card:active .project-card-overlay {
+            opacity: 1;
+        }
+
+        .project-card-info {
+            position: absolute;
+            bottom: 24px;
+            left: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            color: white;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1) 0.1s, opacity 0.5s ease 0.1s;
+        }
+
+        .project-card:hover .project-card-info,
+        .project-card:active .project-card-info {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .project-btn {
+            transform: scale(0.9) translateY(10px);
+            opacity: 0;
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1) 0.1s, opacity 0.5s ease 0.1s, background-color 0.2s, color 0.2s;
+        }
+
+        .project-card:hover .project-btn,
+        .project-card:active .project-btn {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh; /* 修改为 100vh，确保跨设备垂直居中更精准 */
+            background-color: #fcf9f5;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1);
+            will-change: transform; /* 提前告知浏览器将进行位移，优化性能 */
+        }
+
+        .pulse-text {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+            -webkit-font-smoothing: antialiased; /* 统一字体抗锯齿渲染，防止变色 */
+            backface-visibility: hidden; /* 核心修复：强制硬件加速层，防止位移跳动和闪烁 */
+            transform: translateZ(0); 
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
+        }
+
+        .loader-slide-up {
+            transform: translateY(-100%);
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen relative font-body-md text-body-md">
+    <!-- Loader -->
+    <div class="" id="loader">
+        <div class="font-display-lg text-headline-lg font-medium tracking-tighter text-primary pulse-text">请稍等...</div>
+    </div>
+    
+    <!-- Shader Background -->
+    <div class="fixed inset-0 z-[-1] pointer-events-none opacity-40"></div>
+    
+    <!-- Top Navigation Portal -->
+    <header class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface-container/80 backdrop-blur-md bg-surface-container-low/50 dark:bg-surface-container-highest/20 flat no shadows">
+        <div class="flex justify-between items-center w-full px-6 md:px-margin-desktop py-6 max-w-container-max mx-auto">
+            <div class="font-display-lg text-headline-lg-mobile md:text-headline-lg font-medium tracking-tighter text-primary dark:text-on-surface">CAIN</div>
+            <!-- 【SEO/无障碍优化】：给菜单按钮添加 aria-label，告诉屏幕阅读器和爬虫这是一个什么按钮 -->
+            <button aria-label="打开移动端菜单" class="md:hidden text-primary p-2">
+                <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">menu</span>
+            </button>
+        </div>
+    </header>
+    
+    <main class="pt-[120px] pb-24 px-6 md:px-margin-desktop max-w-container-max mx-auto relative z-10">
+        <!-- Hero Section -->
+        <section class="min-h-[50vh] flex justify-center items-start fade-in-up mt-12 mb-32 w-full">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-gutter items-center w-full">
+                <div class="flex flex-col justify-center items-start">
+                    <h1 class="font-display-lg text-display-lg text-primary mb-6 max-w-3xl">欢迎</h1>
+                    <p class="font-body-lg text-body-lg text-secondary max-w-2xl leading-relaxed">你可以点击下方卡片跳转到我的其他作品。</p>
+                </div>
+                <div class="relative h-[300px] md:h-[400px] flex items-center justify-center overflow-hidden">
+                    <!-- Spheres -->
+                    <div class="absolute w-32 h-32 rounded-full bg-surface-tint/10 backdrop-blur-md border border-outline-variant/20 animate-[bounce_8s_infinite_ease-in-out]" style="top: 10%; left: 20%;"></div>
+                    <div class="absolute w-48 h-48 rounded-full bg-primary/5 backdrop-blur-md border border-outline-variant/20 animate-[bounce_12s_infinite_ease-in-out]" style="top: 30%; right: 15%; animation-delay: -2s;"></div>
+                    <div class="absolute w-24 h-24 rounded-full bg-secondary/10 backdrop-blur-md border border-outline-variant/20 animate-[bounce_10s_infinite_ease-in-out]" style="bottom: 15%; left: 40%; animation-delay: -5s;"></div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Project Grid -->
+        <section class="grid grid-cols-1 gap-gutter mb-32 md:grid-cols-3">
+            <!-- Card 1 -->
+            <article class="project-card fade-in-up group aspect-[4/5]">
+                <div class="project-card-image-container w-full h-full bg-surface-container-high relative">
+                    <!-- 【修复】：将 Google 图片替换为 Unsplash 免费图库的科技感图片 -->
+                    <img alt="项目一：Alpha Node 概念设计展示" class="project-card-image object-cover w-full h-full absolute inset-0 mix-blend-multiply" src="./assets/img1.jpg">
+                    <div class="project-card-overlay opacity-100 md:opacity-0">
+                        <!-- 【部署配置】：将 href 修改为我们之前设计的 Nginx 子路径 /app1/ -->
+                        <a class="project-btn bg-white text-black font-body-md text-label-md px-8 py-3 rounded-full hover:bg-gray-200 transition-colors duration-200 flex items-center gap-2 opacity-100 scale-100 translate-y-0 md:opacity-0 md:scale-90 md:translate-y-10" href="/app1/">
+                            访问项目 <span class="material-symbols-outlined" style="font-size: 18px;">arrow_forward</span>
+                        </a>
+                        <div class="project-card-info pointer-events-none opacity-100 translate-y-0 md:opacity-0 md:translate-y-20">
+                            <span class="font-display-lg text-label-md uppercase tracking-widest opacity-80">I. Studio</span>
+                            <h2 class="font-display-lg text-headline-lg-mobile">Alpha Node</h2>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            
+            <!-- Card 2 -->
+            <article class="project-card fade-in-up group aspect-[4/5]">
+                <div class="project-card-image-container w-full h-full bg-surface-container-high relative">
+                    <!-- 【修复】：替换为摄影主题图片 -->
+                    <img alt="项目二：Beta Relay 摄影作品集" class="project-card-image object-cover w-full h-full absolute inset-0 mix-blend-multiply" src="./assets/img2.jpg">
+                    <div class="project-card-overlay opacity-100 md:opacity-0">
+                        <!-- 【部署配置】：链接指向 /app2/ -->
+                        <a class="project-btn bg-white text-black font-body-md text-label-md px-8 py-3 rounded-full hover:bg-gray-200 transition-colors duration-200 flex items-center gap-2 opacity-100 scale-100 translate-y-0 md:opacity-0 md:scale-90 md:translate-y-10" href="/app2/">
+                            访问项目 <span class="material-symbols-outlined" style="font-size: 18px;">arrow_forward</span>
+                        </a>
+                        <div class="project-card-info pointer-events-none opacity-100 translate-y-0 md:opacity-0 md:translate-y-20">
+                            <span class="font-display-lg text-label-md uppercase tracking-widest opacity-80">II. Photography</span>
+                            <h2 class="font-display-lg text-headline-lg-mobile">Beta Relay</h2>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            
+            <!-- Card 3 -->
+            <article class="project-card fade-in-up group aspect-[4/5]">
+                <div class="project-card-image-container w-full h-full bg-surface-container-high relative">
+                    <!-- 【修复】：替换为建筑主题图片 -->
+                    <img alt="项目三：Gamma Sector 建筑与空间设计" class="project-card-image object-cover w-full h-full absolute inset-0 mix-blend-multiply" src="./assets/img3.jpg">
+                    <div class="project-card-overlay opacity-100 md:opacity-0">
+                        <!-- 【部署配置】：链接指向 /app3/ -->
+                        <a class="project-btn bg-white text-black font-body-md text-label-md px-8 py-3 rounded-full hover:bg-gray-200 transition-colors duration-200 flex items-center gap-2 opacity-100 scale-100 translate-y-0 md:opacity-0 md:scale-90 md:translate-y-10" href="/app3/">
+                            访问项目 <span class="material-symbols-outlined" style="font-size: 18px;">arrow_forward</span>
+                        </a>
+                        <div class="project-card-info pointer-events-none opacity-100 translate-y-0 md:opacity-0 md:translate-y-20">
+                            <span class="font-display-lg text-label-md uppercase tracking-widest opacity-80">III. Architecture</span>
+                            <h2 class="font-display-lg text-headline-lg-mobile">Gamma Sector</h2>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            
+            <!-- Card 4 (预留给你未来的第4个项目) -->
+            <article class="project-card fade-in-up group aspect-[4/5]">
+                <div class="project-card-image-container w-full h-full bg-surface-container-high relative">
+                    <!-- 【修复】：替换为基础设施/网络主题图片 -->
+                    <img alt="项目四：Delta Array 基础设施设计" class="project-card-image object-cover w-full h-full absolute inset-0 mix-blend-multiply" src="./assets/img4.jpg">
+                    <div class="project-card-overlay opacity-100 md:opacity-0">
+                        <!-- 【部署配置】：预留 /app4/ -->
+                        <a class="project-btn bg-white text-black font-body-md text-label-md px-8 py-3 rounded-full hover:bg-gray-200 transition-colors duration-200 flex items-center gap-2 opacity-100 scale-100 translate-y-0 md:opacity-0 md:scale-90 md:translate-y-10" href="/app4/">
+                            访问项目 <span class="material-symbols-outlined" style="font-size: 18px;">arrow_forward</span>
+                        </a>
+                        <div class="project-card-info pointer-events-none opacity-100 translate-y-0 md:opacity-0 md:translate-y-20">
+                            <span class="font-display-lg text-label-md uppercase tracking-widest opacity-80">IV. Infrastructure</span>
+                            <h2 class="font-display-lg text-headline-lg-mobile">Delta Array</h2>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="w-full py-12 bg-surface dark:bg-surface-container-lowest border-t border-outline-variant/30 dark:border-outline/20 flat no shadows font-body-md text-label-sm tracking-normal relative z-10">
+        <div class="flex flex-col md:flex-row justify-between items-center px-6 md:px-margin-desktop max-w-container-max mx-auto gap-gutter">
+            <div class="font-display-lg text-headline-lg text-primary dark:text-on-surface mb-6 md:mb-0">CAIN</div>
+            <nav class="flex gap-6 items-center text-secondary dark:text-outline"></nav>
+        </div>
+    </footer>
+    
+    <!-- Scripts -->
+    <script>
+        // Loader logic
+        document.addEventListener("DOMContentLoaded", () => {
+            const loader = document.getElementById('loader');
+            
+            setTimeout(() => {
+                loader.classList.add('loader-slide-up');
+                
+                // Trigger initial fade-ins after loader moves
+                setTimeout(() => {
+                    handleScrollAnimations();
+                }, 500);
+            }, 2000);
+        });
+
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.15
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        function handleScrollAnimations() {
+            const elements = document.querySelectorAll('.fade-in-up');
+            elements.forEach(el => observer.observe(el));
+        }
+    </script>
+</body>
+</html>
