@@ -247,16 +247,40 @@
             transform: translateY(-100%);
         }
 
-        /* ====== Vinyl Card ====== */
+        /* ====== Vinyl Card（严格复刻 React 源码）====== */
         .vinyl-card {
             position: relative;
-            width: 260px;
-            height: 260px;
+            width: 288px;
+            height: 288px;
             cursor: pointer;
+            border-radius: 16px;
+            background: rgba(255,255,255,.7);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(0,0,0,.05);
+            transition: all .2s ease-out;
+            z-index: 10;
             transform-style: preserve-3d;
-            transition: transform .15s ease-out, filter .15s ease-out, box-shadow .15s ease-out;
         }
-        .vinyl-disc {
+        .vinyl-bg-glow {
+            position: absolute;
+            inset: 0;
+            border-radius: 16px;
+            overflow: hidden;
+            z-index: -10;
+            transition: transform .1s ease-out;
+            opacity: .4;
+            pointer-events: none;
+        }
+        .vinyl-bg-glow::before {
+            content: '';
+            position: absolute;
+            inset: -40px;
+            background: linear-gradient(135deg, rgba(229,229,229,.5), rgba(231,229,228,.5), rgba(212,212,212,.5));
+            filter: blur(40px);
+            border-radius: 50%;
+        }
+        .vinyl-wrap {
             position: absolute;
             inset: 0;
             display: flex;
@@ -265,94 +289,119 @@
             z-index: 0;
             pointer-events: none;
         }
-        .vinyl-disc-inner {
-            width: 85%;
-            height: 85%;
+        .vinyl-disc {
+            width: 224px;
+            height: 224px;
             border-radius: 50%;
-            background: #111;
-            box-shadow: 0 10px 40px rgba(0,0,0,.3);
+            background: #000;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,.25);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             position: relative;
-            overflow: hidden;
-            transition: transform .5s cubic-bezier(.25,1,.5,1);
+            border: 1px solid rgba(255,255,255,.1);
+            transition: transform .1s ease-out;
         }
-        .vinyl-card:hover .vinyl-disc-inner { transform: translateX(60px) rotate(15deg); }
-        .vinyl-groove {
-            position: absolute;
-            border-radius: 50%;
-            border: 1px solid rgba(255,255,255,.06);
-        }
+        .vinyl-disc.intro { transition: transform 1s ease-in-out; }
+        .vinyl-disc .groove { position: absolute; border-radius: 50%; border: 1px solid rgba(255,255,255,.05); }
+        .vinyl-disc .groove:nth-child(1) { inset: 4px; }
+        .vinyl-disc .groove:nth-child(2) { inset: 12px; border-color: rgba(255,255,255,.1); }
+        .vinyl-disc .groove:nth-child(3) { inset: 24px; }
+        .vinyl-disc .groove:nth-child(4) { inset: 40px; border-color: rgba(255,255,255,.1); }
+        .vinyl-disc .groove:nth-child(5) { inset: 56px; }
         .vinyl-label {
-            position: absolute;
-            width: 40%;
-            height: 40%;
-            top: 30%;
-            left: 30%;
+            width: 96px; height: 96px;
             border-radius: 50%;
-            background: #1a1a1a;
-            border: 2px solid rgba(255,255,255,.15);
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,.5);
             overflow: hidden;
+            border: 1px solid rgba(255,255,255,.2);
+            position: relative;
+            z-index: 1;
         }
-        .vinyl-label img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: .9;
+        .vinyl-label img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .9; }
+        .vinyl-label::after { content: ''; width: 12px; height: 12px; background: #fff; border-radius: 50%; z-index: 10; position: relative; box-shadow: 0 1px 2px rgba(0,0,0,.3); }
+        .vinyl-gloss {
+            position: absolute; inset: 0; background: linear-gradient(135deg, transparent, rgba(255,255,255,.1), transparent);
+            transform: rotate(45deg); pointer-events: none; z-index: 2;
         }
         .vinyl-cover {
-            position: absolute;
-            inset: 5%;
+            position: absolute; inset: 24px;
             z-index: 10;
-            border-radius: 16px;
-            overflow: hidden;
             pointer-events: none;
-            box-shadow: 0 4px 20px rgba(0,0,0,.08);
-            transition: transform .15s ease-out, filter .15s ease-out;
+            transition: transform .1s ease-out, filter .1s ease-out;
         }
-        .vinyl-cover img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        .vinyl-cover-inner {
+            width: 100%; height: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 4px 12px rgba(0,0,0,.08);
+        }
+        .vinyl-cover-inner img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .vinyl-cover-inner::after {
+            content: '';
+            position: absolute; inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,.2), transparent 60%);
+            pointer-events: none; border-radius: 12px;
         }
         .vinyl-badge {
-            position: absolute;
-            top: 16px;
-            right: -8px;
-            z-index: 20;
+            position: absolute; top: 32px; right: -16px; z-index: 20;
             pointer-events: none;
-            transition: transform .15s ease-out;
+            transition: transform .1s ease-out;
         }
         .vinyl-badge span {
             display: block;
-            background: #111;
+            background: rgba(0,0,0,.9);
             color: #fff;
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 700;
-            letter-spacing: .08em;
-            padding: 5px 14px;
-            box-shadow: 0 2px 8px rgba(0,0,0,.15);
-            white-space: nowrap;
+            letter-spacing: .05em;
+            padding: 6px 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,.15);
+            transform: rotate(3deg);
+        }
+        .vinyl-badge::after {
+            content: '';
+            display: block;
+            width: 32px; height: 16px;
+            background: rgba(0,0,0,.3);
+            transform: rotate(-45deg);
+            transform-origin: bottom right;
+            z-index: -10;
+            position: absolute;
+            bottom: -4px; left: -8px;
         }
         .vinyl-title {
-            position: absolute;
-            bottom: 20px;
-            left: 16px;
-            z-index: 20;
+            position: absolute; bottom: 40px; left: 12px; z-index: 20;
             pointer-events: none;
-            transition: transform .15s ease-out;
-            line-height: 1.2;
+            transition: transform .1s ease-out;
         }
         .vinyl-title .t1 {
             font-family: 'DM Sans', sans-serif;
-            font-size: 14px;
-            font-weight: 700;
-            color: #1c1c1a;
-            letter-spacing: .05em;
+            font-size: 14px; font-weight: 900;
+            color: rgba(0,0,0,.9);
+            letter-spacing: .08em;
+            line-height: 1.2;
+            text-shadow: 0 1px 2px rgba(0,0,0,.05);
         }
         .vinyl-title .t2 {
-            font-family: 'Hanken Grotesk', sans-serif;
-            font-size: 11px;
-            color: #888;
+            font-family: 'Hanken Grotesk', monospace;
+            font-size: 12px; font-weight: 400;
+            color: rgba(0,0,0,.5);
             letter-spacing: .08em;
+            margin-top: 4px;
+            transform: scale(.75);
+            transform-origin: left;
+            white-space: nowrap;
+        }
+        @media (min-width: 768px) {
+            .vinyl-card { width: 320px; height: 320px; }
+            .vinyl-disc { width: 256px; height: 256px; }
         }
     </style>
 </head>
@@ -385,27 +434,34 @@
                     <p class="font-body-lg text-body-lg text-secondary max-w-2xl leading-relaxed">你可以点击下方卡片跳转到我的其他作品。</p>
                 </div>
                 <div class="relative h-[300px] md:h-[400px] flex items-center justify-center overflow-visible">
-                    <!-- Vinyl Card -->
+                    <!-- Vinyl Card（严格复刻 React 源码结构） -->
                     <div class="vinyl-card" id="vinylCard">
-                        <div class="vinyl-disc">
-                            <div class="vinyl-disc-inner">
-                                <div class="vinyl-groove" style="inset:4px;"></div>
-                                <div class="vinyl-groove" style="inset:12px;"></div>
-                                <div class="vinyl-groove" style="inset:22px;"></div>
-                                <div class="vinyl-groove" style="inset:34px;"></div>
+                        <!-- 背景柔光 -->
+                        <div class="vinyl-bg-glow"></div>
+                        <!-- 黑胶唱片 -->
+                        <div class="vinyl-wrap">
+                            <div class="vinyl-disc" id="vinylDisc">
+                                <div class="groove"></div>
+                                <div class="groove"></div>
+                                <div class="groove"></div>
+                                <div class="groove"></div>
+                                <div class="groove"></div>
                                 <div class="vinyl-label">
                                     <img src="./assets/card-1.png" alt="Label">
-                                    <div style="position:absolute;inset:0;background:linear-gradient(135deg,transparent 40%,rgba(255,255,255,.1) 50%,transparent 60%);pointer-events:none;"></div>
                                 </div>
-                                <div style="position:absolute;inset:0;background:linear-gradient(135deg,transparent 30%,rgba(255,255,255,.08) 50%,transparent 70%);pointer-events:none;"></div>
+                                <div class="vinyl-gloss"></div>
                             </div>
                         </div>
-                        <div class="vinyl-cover">
-                            <img src="./assets/card-2.png" alt="Cover">
-                            <div style="position:absolute;inset:0;background:linear-gradient(to bottom right,rgba(255,255,255,.2),transparent 50%);pointer-events:none;"></div>
+                        <!-- 封面图 -->
+                        <div class="vinyl-cover" id="vinylCover">
+                            <div class="vinyl-cover-inner">
+                                <img src="./assets/card-2.png" alt="Cover">
+                            </div>
                         </div>
-                        <div class="vinyl-badge"><span>NOW PLAYING</span></div>
-                        <div class="vinyl-title">
+                        <!-- NOW PLAYING 徽章 -->
+                        <div class="vinyl-badge" id="vinylBadge"><span>NOW PLAYING</span></div>
+                        <!-- 底部文字 -->
+                        <div class="vinyl-title" id="vinylTitle">
                             <div class="t1">MINIMALIST</div>
                             <div class="t2">ART COLLECTION</div>
                         </div>
@@ -533,14 +589,17 @@
             elements.forEach(el => observer.observe(el));
         }
 
-        // ====== Vinyl Card 3D Tilt ======
+        // ====== Vinyl Card 3D Tilt（严格复刻 React 源码）======
         (function() {
             const card = document.getElementById('vinylCard');
             if (!card) return;
-            const cover = card.querySelector('.vinyl-cover');
-            const badge = card.querySelector('.vinyl-badge');
-            const title = card.querySelector('.vinyl-title');
-            let centerX = 0, centerY = 0;
+            const disc = document.getElementById('vinylDisc');
+            const cover = document.getElementById('vinylCover');
+            const badge = document.getElementById('vinylBadge');
+            const title = document.getElementById('vinylTitle');
+            const bgGlow = card.querySelector('.vinyl-bg-glow');
+            let centerX = 0, centerY = 0, isHovering = false;
+            let introDone = false;
 
             function updateCenter() {
                 const r = card.getBoundingClientRect();
@@ -550,35 +609,72 @@
             updateCenter();
             window.addEventListener('resize', updateCenter);
 
-            function rotate(cp, cp2, t) {
-                if (t === undefined) t = 20;
-                var d = cp - cp2;
-                return d >= 0 ? (d >= t ? t : d) : (d <= -t ? -t : d);
+            // 复刻源码 rotate 函数
+            function rotate(cursorPosition, centerPosition, threshold) {
+                threshold = threshold || 20;
+                var delta = cursorPosition - centerPosition;
+                return delta >= 0
+                    ? (delta >= threshold ? threshold : delta)
+                    : (delta <= -threshold ? -threshold : delta);
+            }
+            // 复刻源码 brightness 函数
+            function brightness(cursorPositionY, centerPositionY, strength) {
+                strength = strength || 20;
+                return 1 - rotate(cursorPositionY, centerPositionY) / strength * 0.05;
             }
 
+            // Intro 动画：黑胶弹出再收回（复刻 React useEffect）
+            disc.classList.add('intro');
+            disc.style.transform = 'translate(160px, 0px) rotate(30deg)';
+            setTimeout(function() {
+                disc.classList.remove('intro');
+                if (!isHovering) {
+                    disc.style.transform = 'translate(20px, 0px) rotate(0deg)';
+                }
+                introDone = true;
+            }, 1000);
+
             card.addEventListener('mouseenter', function() {
+                isHovering = true;
                 updateCenter();
             });
-            card.addEventListener('mousemove', function(e) {
-                var cx = rotate(e.clientX, centerX, 15);
-                var cy = rotate(e.clientY, centerY, 15);
-                var dx = e.clientX - centerX;
-                var dy = e.clientY - centerY;
-                var br = 1 - rotate(e.clientY, centerY, 30) / 30 * 0.03;
-                card.style.transform = 'perspective(1000px) rotateY(' + cx + 'deg) rotateX(' + (-cy/2) + 'deg) scale(1.05)';
-                card.style.filter = 'brightness(' + br + ')';
-                card.style.boxShadow = (-cx*1.5) + 'px ' + (-cy*1.5) + 'px 30px rgba(0,0,0,.08)';
-                if (cover) cover.style.transform = 'translate(' + (dx/20) + 'px,' + (dy/20) + 'px)';
-                if (badge) badge.style.transform = 'translate(' + (dx/8) + 'px,' + (dy/12) + 'px)';
-                if (title) title.style.transform = 'translate(' + (dx/10) + 'px,' + (dy/14) + 'px)';
-            });
+
             card.addEventListener('mouseleave', function() {
-                card.style.transform = 'perspective(1000px) rotateY(0) rotateX(0) scale(1)';
-                card.style.filter = 'brightness(1)';
+                isHovering = false;
+                if (!introDone) return;
+                // 复刻 handleMouseLeave
+                card.style.transform = 'perspective(1000px) rotateY(0deg) rotateX(0deg) scale(1)';
+                card.style.filter = 'brightness(1) drop-shadow(0 10px 20px rgba(0,0,0,.05))';
                 card.style.boxShadow = '0 0 0 0 rgba(0,0,0,0)';
-                if (cover) cover.style.transform = 'translate(0,0)';
-                if (badge) badge.style.transform = 'translate(0,0)';
-                if (title) title.style.transform = 'translate(0,0)';
+                disc.style.transform = 'translate(20px, 0px) rotate(0deg)';
+                cover.style.transform = 'translate(0px, 0px)';
+                cover.style.filter = 'drop-shadow(0 8px 12px rgba(0,0,0,.08))';
+                badge.style.transform = 'translate(0px, 0px)';
+                title.style.transform = 'translate(0px, 0px)';
+                if (bgGlow) bgGlow.style.transform = 'translate(0px, 0px)';
+            });
+
+            card.addEventListener('mousemove', function(e) {
+                if (!introDone) return;
+                // 复刻 handleMouseMove — 完全一致的公式
+                var calcX = rotate(e.clientX, centerX, 15);
+                var calcY = rotate(e.clientY, centerY, 15);
+                var calcX2 = e.clientX - centerX;
+                var calcY2 = e.clientY - centerY;
+
+                card.style.transform = 'translateZ(0) perspective(1000px) rotateY(' + calcX + 'deg) rotateX(' + (-calcY/2) + 'deg) scale(1.05)';
+                card.style.filter = 'brightness(' + brightness(e.clientY, centerY, 30) + ')';
+                card.style.boxShadow = (-calcX*1.5) + 'px ' + (-calcY*1.5) + 'px 30px rgba(0,0,0,.08)';
+
+                // 黑胶：160px 基础偏移 + 鼠标视差
+                disc.style.transform = 'translate(' + (calcX2/10 + 160) + 'px, ' + (calcY2/15) + 'px) rotate(' + (calcX2/4) + 'deg)';
+                // 封面
+                cover.style.transform = 'translate(' + (calcX2/20) + 'px, ' + (calcY2/20) + 'px)';
+                cover.style.filter = 'drop-shadow(' + (-calcX) + 'px ' + (-calcY) + 'px 15px rgba(0,0,0,.1))';
+                // 徽章 + 标题
+                badge.style.transform = 'translate(' + (calcX2/8) + 'px, ' + (calcY2/12) + 'px)';
+                title.style.transform = 'translate(' + (calcX2/8) + 'px, ' + (calcY2/12) + 'px)';
+                if (bgGlow) bgGlow.style.transform = 'translate(' + (calcX2/20) + 'px, ' + (calcY2/20) + 'px)';
             });
         })();
     </script>
