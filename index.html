@@ -294,14 +294,13 @@
             height: 224px;
             border-radius: 50%;
             background: #000;
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,.25);
             overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
             border: 1px solid rgba(255,255,255,.1);
-            transition: transform .1s ease-out;
+            transition: transform .6s ease-out;
         }
         .vinyl-disc.intro { transition: transform 1s ease-in-out; }
         .vinyl-disc .groove { position: absolute; border-radius: 50%; border: 1px solid rgba(255,255,255,.05); }
@@ -624,18 +623,22 @@
                 return 1 - rotate(cursorPositionY, centerPositionY) / strength * 0.05;
             }
 
-            // Intro 由遮屏动画结束后调用
+            // Intro 由遮屏动画结束后调用 — 唱片直接以 hover 展开态出场，再收回静止态
             window.triggerVinylIntro = function() {
                 if (!disc) return;
-                disc.classList.add('intro');
+                // 关闭过渡，瞬间设为展开态（hover 态）
+                disc.style.transition = 'none';
                 disc.style.transform = 'translate(160px, 0px) rotate(30deg)';
+                // 强制浏览器重排，确保上一条生效
+                disc.offsetHeight;
+                // 恢复过渡，准备收回
+                disc.style.transition = '';
                 setTimeout(function() {
-                    disc.classList.remove('intro');
                     if (!isHovering) {
                         disc.style.transform = 'translate(20px, 0px) rotate(0deg)';
                     }
                     introDone = true;
-                }, 1000);
+                }, 1500);
             };
 
             card.addEventListener('mouseenter', function() {
