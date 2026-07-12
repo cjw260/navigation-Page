@@ -554,18 +554,19 @@
     
     <!-- Scripts -->
     <script>
-        // Loader logic
-        document.addEventListener("DOMContentLoaded", () => {
+        // Loader logic — 等所有资源（图片/字体/模型）加载完 + 1.5s
+        window.addEventListener('load', () => {
             const loader = document.getElementById('loader');
-            
+            // 页面资源全部加载完成后，再给 1.5s 让用户看到卡片 intro
             setTimeout(() => {
                 loader.classList.add('loader-slide-up');
-                
-                // Trigger initial fade-ins after loader moves
+                // 触发黑胶 intro 动画
+                triggerVinylIntro();
+                // 滚动淡入动画
                 setTimeout(() => {
                     handleScrollAnimations();
                 }, 500);
-            }, 2000);
+            }, 1500);
         });
 
         // Intersection Observer for scroll animations
@@ -623,16 +624,19 @@
                 return 1 - rotate(cursorPositionY, centerPositionY) / strength * 0.05;
             }
 
-            // Intro 动画：黑胶弹出再收回（复刻 React useEffect）
-            disc.classList.add('intro');
-            disc.style.transform = 'translate(160px, 0px) rotate(30deg)';
-            setTimeout(function() {
-                disc.classList.remove('intro');
-                if (!isHovering) {
-                    disc.style.transform = 'translate(20px, 0px) rotate(0deg)';
-                }
-                introDone = true;
-            }, 1000);
+            // Intro 由遮屏动画结束后调用
+            window.triggerVinylIntro = function() {
+                if (!disc) return;
+                disc.classList.add('intro');
+                disc.style.transform = 'translate(160px, 0px) rotate(30deg)';
+                setTimeout(function() {
+                    disc.classList.remove('intro');
+                    if (!isHovering) {
+                        disc.style.transform = 'translate(20px, 0px) rotate(0deg)';
+                    }
+                    introDone = true;
+                }, 1000);
+            };
 
             card.addEventListener('mouseenter', function() {
                 isHovering = true;
