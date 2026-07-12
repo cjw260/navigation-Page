@@ -246,6 +246,114 @@
         .loader-slide-up {
             transform: translateY(-100%);
         }
+
+        /* ====== Vinyl Card ====== */
+        .vinyl-card {
+            position: relative;
+            width: 260px;
+            height: 260px;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transition: transform .15s ease-out, filter .15s ease-out, box-shadow .15s ease-out;
+        }
+        .vinyl-disc {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .vinyl-disc-inner {
+            width: 85%;
+            height: 85%;
+            border-radius: 50%;
+            background: #111;
+            box-shadow: 0 10px 40px rgba(0,0,0,.3);
+            position: relative;
+            overflow: hidden;
+            transition: transform .5s cubic-bezier(.25,1,.5,1);
+        }
+        .vinyl-card:hover .vinyl-disc-inner { transform: translateX(60px) rotate(15deg); }
+        .vinyl-groove {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,.06);
+        }
+        .vinyl-label {
+            position: absolute;
+            width: 40%;
+            height: 40%;
+            top: 30%;
+            left: 30%;
+            border-radius: 50%;
+            background: #1a1a1a;
+            border: 2px solid rgba(255,255,255,.15);
+            overflow: hidden;
+        }
+        .vinyl-label img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: .9;
+        }
+        .vinyl-cover {
+            position: absolute;
+            inset: 5%;
+            z-index: 10;
+            border-radius: 16px;
+            overflow: hidden;
+            pointer-events: none;
+            box-shadow: 0 4px 20px rgba(0,0,0,.08);
+            transition: transform .15s ease-out, filter .15s ease-out;
+        }
+        .vinyl-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .vinyl-badge {
+            position: absolute;
+            top: 16px;
+            right: -8px;
+            z-index: 20;
+            pointer-events: none;
+            transition: transform .15s ease-out;
+        }
+        .vinyl-badge span {
+            display: block;
+            background: #111;
+            color: #fff;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .08em;
+            padding: 5px 14px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.15);
+            white-space: nowrap;
+        }
+        .vinyl-title {
+            position: absolute;
+            bottom: 20px;
+            left: 16px;
+            z-index: 20;
+            pointer-events: none;
+            transition: transform .15s ease-out;
+            line-height: 1.2;
+        }
+        .vinyl-title .t1 {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            color: #1c1c1a;
+            letter-spacing: .05em;
+        }
+        .vinyl-title .t2 {
+            font-family: 'Hanken Grotesk', sans-serif;
+            font-size: 11px;
+            color: #888;
+            letter-spacing: .08em;
+        }
     </style>
 </head>
 <body class="antialiased min-h-screen relative font-body-md text-body-md">
@@ -276,11 +384,32 @@
                     <h1 class="font-display-lg text-display-lg text-primary mb-6 max-w-3xl">欢迎</h1>
                     <p class="font-body-lg text-body-lg text-secondary max-w-2xl leading-relaxed">你可以点击下方卡片跳转到我的其他作品。</p>
                 </div>
-                <div class="relative h-[300px] md:h-[400px] flex items-center justify-center overflow-hidden">
-                    <!-- Spheres -->
-                    <div class="absolute w-32 h-32 rounded-full bg-surface-tint/10 backdrop-blur-md border border-outline-variant/20 animate-[bounce_8s_infinite_ease-in-out]" style="top: 10%; left: 20%;"></div>
-                    <div class="absolute w-48 h-48 rounded-full bg-primary/5 backdrop-blur-md border border-outline-variant/20 animate-[bounce_12s_infinite_ease-in-out]" style="top: 30%; right: 15%; animation-delay: -2s;"></div>
-                    <div class="absolute w-24 h-24 rounded-full bg-secondary/10 backdrop-blur-md border border-outline-variant/20 animate-[bounce_10s_infinite_ease-in-out]" style="bottom: 15%; left: 40%; animation-delay: -5s;"></div>
+                <div class="relative h-[300px] md:h-[400px] flex items-center justify-center overflow-visible">
+                    <!-- Vinyl Card -->
+                    <div class="vinyl-card" id="vinylCard">
+                        <div class="vinyl-disc">
+                            <div class="vinyl-disc-inner">
+                                <div class="vinyl-groove" style="inset:4px;"></div>
+                                <div class="vinyl-groove" style="inset:12px;"></div>
+                                <div class="vinyl-groove" style="inset:22px;"></div>
+                                <div class="vinyl-groove" style="inset:34px;"></div>
+                                <div class="vinyl-label">
+                                    <img src="./assets/card-1.png" alt="Label">
+                                    <div style="position:absolute;inset:0;background:linear-gradient(135deg,transparent 40%,rgba(255,255,255,.1) 50%,transparent 60%);pointer-events:none;"></div>
+                                </div>
+                                <div style="position:absolute;inset:0;background:linear-gradient(135deg,transparent 30%,rgba(255,255,255,.08) 50%,transparent 70%);pointer-events:none;"></div>
+                            </div>
+                        </div>
+                        <div class="vinyl-cover">
+                            <img src="./assets/card-2.png" alt="Cover">
+                            <div style="position:absolute;inset:0;background:linear-gradient(to bottom right,rgba(255,255,255,.2),transparent 50%);pointer-events:none;"></div>
+                        </div>
+                        <div class="vinyl-badge"><span>NOW PLAYING</span></div>
+                        <div class="vinyl-title">
+                            <div class="t1">MINIMALIST</div>
+                            <div class="t2">ART COLLECTION</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -403,6 +532,55 @@
             const elements = document.querySelectorAll('.fade-in-up');
             elements.forEach(el => observer.observe(el));
         }
+
+        // ====== Vinyl Card 3D Tilt ======
+        (function() {
+            const card = document.getElementById('vinylCard');
+            if (!card) return;
+            const cover = card.querySelector('.vinyl-cover');
+            const badge = card.querySelector('.vinyl-badge');
+            const title = card.querySelector('.vinyl-title');
+            let centerX = 0, centerY = 0;
+
+            function updateCenter() {
+                const r = card.getBoundingClientRect();
+                centerX = r.left + r.width / 2;
+                centerY = r.top + r.height / 2;
+            }
+            updateCenter();
+            window.addEventListener('resize', updateCenter);
+
+            function rotate(cp, cp2, t) {
+                if (t === undefined) t = 20;
+                var d = cp - cp2;
+                return d >= 0 ? (d >= t ? t : d) : (d <= -t ? -t : d);
+            }
+
+            card.addEventListener('mouseenter', function() {
+                updateCenter();
+            });
+            card.addEventListener('mousemove', function(e) {
+                var cx = rotate(e.clientX, centerX, 15);
+                var cy = rotate(e.clientY, centerY, 15);
+                var dx = e.clientX - centerX;
+                var dy = e.clientY - centerY;
+                var br = 1 - rotate(e.clientY, centerY, 30) / 30 * 0.03;
+                card.style.transform = 'perspective(1000px) rotateY(' + cx + 'deg) rotateX(' + (-cy/2) + 'deg) scale(1.05)';
+                card.style.filter = 'brightness(' + br + ')';
+                card.style.boxShadow = (-cx*1.5) + 'px ' + (-cy*1.5) + 'px 30px rgba(0,0,0,.08)';
+                if (cover) cover.style.transform = 'translate(' + (dx/20) + 'px,' + (dy/20) + 'px)';
+                if (badge) badge.style.transform = 'translate(' + (dx/8) + 'px,' + (dy/12) + 'px)';
+                if (title) title.style.transform = 'translate(' + (dx/10) + 'px,' + (dy/14) + 'px)';
+            });
+            card.addEventListener('mouseleave', function() {
+                card.style.transform = 'perspective(1000px) rotateY(0) rotateX(0) scale(1)';
+                card.style.filter = 'brightness(1)';
+                card.style.boxShadow = '0 0 0 0 rgba(0,0,0,0)';
+                if (cover) cover.style.transform = 'translate(0,0)';
+                if (badge) badge.style.transform = 'translate(0,0)';
+                if (title) title.style.transform = 'translate(0,0)';
+            });
+        })();
     </script>
 </body>
 </html>
