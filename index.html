@@ -171,14 +171,12 @@
         /* Hover时：底图透明消失，视频出现并播放 */
         .project-card:hover .project-card-image,
         .project-card:active .project-card-image {
-            transform: scale(1.05);
-            opacity: 0; 
+            opacity: 0;
         }
 
         .project-card:hover .project-card-video,
         .project-card:active .project-card-video {
-            transform: scale(1.05);
-            opacity: 1; 
+            opacity: 1;
         }
 
         .project-card-overlay {
@@ -187,8 +185,9 @@
             background: rgba(0,0,0,0.4);
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            justify-content: flex-end;
+            align-items: flex-end;
+            padding: 20px;
             opacity: 0;
             transition: opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1);
             z-index: 20; /* 确保悬浮信息层在视频和图片之上 */
@@ -416,6 +415,17 @@
             .vinyl-card { width: 320px; height: 320px; }
             .vinyl-disc { width: 256px; height: 256px; }
         }
+
+        /* 卡片整体可点击的拉伸链接 */
+        .card-link {
+            position: absolute;
+            inset: 0;
+            z-index: 30;
+        }
+        .project-card .project-btn {
+            z-index: 35;
+            pointer-events: auto;
+        }
     </style>
 </head>
 <body class="antialiased min-h-screen relative font-body-md text-body-md">
@@ -485,6 +495,7 @@
             <!-- 【修改】：将 aspect-[4/5] 改为 aspect-video (16:9 标准比例) -->
             <article class="project-card fade-in-up group aspect-video">
                 <div class="project-card-image-container w-full h-full bg-surface-container-high relative">
+                    <a class="card-link" href="/en/"></a>
                     <!-- 【新增】：展示视频，默认透明度为0，悬浮时播放 -->
                     <video class="project-card-video object-cover w-full h-full absolute inset-0 z-0 opacity-0" muted loop playsinline>
                         <source src="./assets/en_video.mp4" type="video/mp4">
@@ -508,6 +519,7 @@
             <!-- Card 2 -->
             <article class="project-card fade-in-up group aspect-video">
                 <div class="project-card-image-container w-full h-full bg-surface-container-high relative">
+                    <a class="card-link" href="/work/"></a>
                     <!-- 【新增】：展示视频 -->
                     <video class="project-card-video object-cover w-full h-full absolute inset-0 z-0 opacity-0" muted loop playsinline>
                         <source src="./assets/work_video.mp4" type="video/mp4">
@@ -529,6 +541,7 @@
             <!-- Card 3 -->
             <article class="project-card fade-in-up group aspect-video">
                 <div class="project-card-image-container w-full h-full bg-surface-container-high relative">
+                    <a class="card-link" href="/app3/"></a>
                     <!-- 【新增】：展示视频 -->
                     <video class="project-card-video object-cover w-full h-full absolute inset-0 z-0 opacity-0" muted loop playsinline>
                         <source src="./assets/tool_video.mp4" type="video/mp4">
@@ -547,22 +560,24 @@
                 </div>
             </article>
             
-            <!-- Card 4 -->
+            <!-- Card 4: 个人博客 -->
             <article class="project-card fade-in-up group aspect-video">
                 <div class="project-card-image-container w-full h-full bg-surface-container-high relative">
+                    <!-- 整卡可点击链接 -->
+                    <a class="card-link" href="/blog/"></a>
                     <!-- 【新增】：展示视频 -->
                     <video class="project-card-video object-cover w-full h-full absolute inset-0 z-0 opacity-0" muted loop playsinline>
-                        <source src="" type="video/mp4">
+                        <source src="./assets/blog_video.mp4" type="video/mp4">
                     </video>
 
-                    <img alt="项目四：Delta Array 基础设施设计" class="project-card-image object-cover w-full h-full absolute inset-0 mix-blend-multiply z-10" src="./assets/img4.jpg" onerror="this.src='https://placehold.co/800x450/e0dfde/1c1c1a?text=Project+4'">
+                    <img alt="个人博客" class="project-card-image object-cover w-full h-full absolute inset-0 mix-blend-multiply z-10" src="./assets/blog_img.png" onerror="this.src='https://placehold.co/800x450/e0dfde/1c1c1a?text=Blog'">
                     <div class="project-card-overlay opacity-100 md:opacity-0">
-                        <a class="project-btn bg-white text-black font-body-md text-label-md px-8 py-3 rounded-full hover:bg-gray-200 transition-colors duration-200 flex items-center gap-2 opacity-100 scale-100 translate-y-0 md:opacity-0 md:scale-90 md:translate-y-10" href="/app4/">
+                        <a class="project-btn bg-white text-black font-body-md text-label-md px-8 py-3 rounded-full hover:bg-gray-200 transition-colors duration-200 flex items-center gap-2 opacity-100 scale-100 translate-y-0 md:opacity-0 md:scale-90 md:translate-y-10" href="/blog/">
                             访问项目 <span class="material-symbols-outlined" style="font-size: 18px;">arrow_forward</span>
                         </a>
                         <div class="project-card-info pointer-events-none opacity-100 translate-y-0 md:opacity-0 md:translate-y-20">
-                            <span class="font-display-lg text-label-md uppercase tracking-widest opacity-80">IV. Infrastructure</span>
-                            <h2 class="font-display-lg text-headline-lg-mobile">Delta Array</h2>
+                            <span class="font-display-lg text-label-md uppercase tracking-widest opacity-80">IV. BLOG</span>
+                            <h2 class="font-display-lg text-headline-lg-mobile">个人博客</h2>
                         </div>
                     </div>
                 </div>
