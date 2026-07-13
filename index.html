@@ -151,7 +151,7 @@
             overflow: hidden;
             border: 1px solid #E5E2DD;
             background: linear-gradient(180deg, rgba(255,255,255,0.8) 0%, rgba(245,245,245,0.4) 100%);
-            border-radius: 0.125rem;
+            border-radius: 16px; /* 【修改】：将圆角改大，匹配设计感 */
         }
 
         .project-card-image-container {
@@ -159,13 +159,26 @@
             position: relative;
         }
 
-        .project-card-image {
-            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+        /* 视频预览的基础与过渡样式 */
+        .project-card-video {
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s ease;
         }
 
+        .project-card-image {
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s ease;
+        }
+
+        /* Hover时：底图透明消失，视频出现并播放 */
         .project-card:hover .project-card-image,
         .project-card:active .project-card-image {
             transform: scale(1.05);
+            opacity: 0; 
+        }
+
+        .project-card:hover .project-card-video,
+        .project-card:active .project-card-video {
+            transform: scale(1.05);
+            opacity: 1; 
         }
 
         .project-card-overlay {
@@ -178,6 +191,7 @@
             align-items: center;
             opacity: 0;
             transition: opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+            z-index: 20; /* 确保悬浮信息层在视频和图片之上 */
         }
 
         .project-card:hover .project-card-overlay,
@@ -221,20 +235,20 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 100vh; /* 修改为 100vh，确保跨设备垂直居中更精准 */
+            height: 100vh;
             background-color: #fcf9f5;
             z-index: 9999;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1);
-            will-change: transform; /* 提前告知浏览器将进行位移，优化性能 */
+            will-change: transform;
         }
 
         .pulse-text {
             animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-            -webkit-font-smoothing: antialiased; /* 统一字体抗锯齿渲染，防止变色 */
-            backface-visibility: hidden; /* 核心修复：强制硬件加速层，防止位移跳动和闪烁 */
+            -webkit-font-smoothing: antialiased;
+            backface-visibility: hidden;
             transform: translateZ(0); 
         }
 
@@ -417,7 +431,7 @@
     <header class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface-container/80 backdrop-blur-md bg-surface-container-low/50 dark:bg-surface-container-highest/20 flat no shadows">
         <div class="flex justify-between items-center w-full px-6 md:px-margin-desktop py-6 max-w-container-max mx-auto">
             <div class="font-display-lg text-headline-lg-mobile md:text-headline-lg font-medium tracking-tighter text-primary dark:text-on-surface">CAIN</div>
-            <!-- 【SEO/无障碍优化】：给菜单按钮添加 aria-label，告诉屏幕阅读器和爬虫这是一个什么按钮 -->
+            <!-- 【SEO/无障碍优化】：给菜单按钮添加 aria-label -->
             <button aria-label="打开移动端菜单" class="md:hidden text-primary p-2">
                 <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">menu</span>
             </button>
@@ -435,9 +449,7 @@
                 <div class="relative h-[300px] md:h-[400px] flex items-center justify-center overflow-visible">
                     <!-- Vinyl Card（严格复刻 React 源码结构） -->
                     <div class="vinyl-card" id="vinylCard">
-                        <!-- 背景柔光 -->
                         <div class="vinyl-bg-glow"></div>
-                        <!-- 黑胶唱片 -->
                         <div class="vinyl-wrap">
                             <div class="vinyl-disc" id="vinylDisc">
                                 <div class="groove"></div>
@@ -446,20 +458,17 @@
                                 <div class="groove"></div>
                                 <div class="groove"></div>
                                 <div class="vinyl-label">
-                                    <img src="./assets/song.jpg" alt="Label">
+                                    <img src="./assets/song.jpg" alt="Label" onerror="this.src='https://placehold.co/100x100/111/fff?text=Vinyl'">
                                 </div>
                                 <div class="vinyl-gloss"></div>
                             </div>
                         </div>
-                        <!-- 封面图 -->
                         <div class="vinyl-cover" id="vinylCover">
                             <div class="vinyl-cover-inner">
-                                <img src="./assets/song.jpg" alt="Cover">
+                                <img src="./assets/song.jpg" alt="Cover" onerror="this.src='https://placehold.co/300x300/222/fff?text=Cover'">
                             </div>
                         </div>
-                        <!-- NOW PLAYING 徽章 -->
                         <div class="vinyl-badge" id="vinylBadge"><span>NOW PLAYING</span></div>
-                        <!-- 底部文字 -->
                         <div class="vinyl-title" id="vinylTitle">
                             <div class="t1">MINIMALIST</div>
                             <div class="t2">ART COLLECTION</div>
@@ -470,30 +479,42 @@
         </section>
         
         <!-- Project Grid -->
-        <section class="grid grid-cols-1 gap-gutter mb-32 md:grid-cols-3">
+        <!-- 【修改】：将 md:grid-cols-3 改为 md:grid-cols-2（一排两个卡片） -->
+        <section class="grid grid-cols-1 gap-gutter mb-32 md:grid-cols-2">
             <!-- Card 1: English Learning -->
-            <article class="project-card fade-in-up group aspect-[4/5]">
+            <!-- 【修改】：将 aspect-[4/5] 改为 aspect-video (16:9 标准比例) -->
+            <article class="project-card fade-in-up group aspect-video">
                 <div class="project-card-image-container w-full h-full bg-surface-container-high relative">
-                    <img alt="English Learning - 智能英语学习平台" class="project-card-image object-cover w-full h-full absolute inset-0 mix-blend-multiply" src="./assets/img1.jpg">
+                    <!-- 【新增】：展示视频，默认透明度为0，悬浮时播放 -->
+                    <video class="project-card-video object-cover w-full h-full absolute inset-0 z-0 opacity-0" muted loop playsinline>
+                        <source src="./assets/en_video.mp4" type="video/mp4">
+                    </video>
+                    
+                    <!-- 原预览底图 -->
+                    <img alt="AI英语学习平台" class="project-card-image object-cover w-full h-full absolute inset-0 mix-blend-multiply z-10" src="./assets/en_img.png" onerror="this.src='https://placehold.co/800x450/e0dfde/1c1c1a?text=Project+1'">
+                    
                     <div class="project-card-overlay opacity-100 md:opacity-0">
                         <a class="project-btn bg-white text-black font-body-md text-label-md px-8 py-3 rounded-full hover:bg-gray-200 transition-colors duration-200 flex items-center gap-2 opacity-100 scale-100 translate-y-0 md:opacity-0 md:scale-90 md:translate-y-10" href="/en/">
                             访问项目 <span class="material-symbols-outlined" style="font-size: 18px;">arrow_forward</span>
                         </a>
                         <div class="project-card-info pointer-events-none opacity-100 translate-y-0 md:opacity-0 md:translate-y-20">
-                            <span class="font-display-lg text-label-md uppercase tracking-widest opacity-80">I. Full-Stack</span>
-                            <h2 class="font-display-lg text-headline-lg-mobile">English Learning</h2>
+                            <span class="font-display-lg text-label-md uppercase tracking-widest opacity-80">I. AI LEARNING</span>
+                            <h2 class="font-display-lg text-headline-lg-mobile">AI英语学习平台</h2>
                         </div>
                     </div>
                 </div>
             </article>
             
             <!-- Card 2 -->
-            <article class="project-card fade-in-up group aspect-[4/5]">
+            <article class="project-card fade-in-up group aspect-video">
                 <div class="project-card-image-container w-full h-full bg-surface-container-high relative">
-                    <!-- 【修复】：替换为摄影主题图片 -->
-                    <img alt="项目二：Beta Relay 摄影作品集" class="project-card-image object-cover w-full h-full absolute inset-0 mix-blend-multiply" src="./assets/img2.jpg">
+                    <!-- 【新增】：展示视频 -->
+                    <video class="project-card-video object-cover w-full h-full absolute inset-0 z-0 opacity-0" muted loop playsinline>
+                        <source src="" type="video/mp4">
+                    </video>
+                    
+                    <img alt="项目二：Beta Relay 摄影作品集" class="project-card-image object-cover w-full h-full absolute inset-0 mix-blend-multiply z-10" src="./assets/img2.jpg" onerror="this.src='https://placehold.co/800x450/e0dfde/1c1c1a?text=Project+2'">
                     <div class="project-card-overlay opacity-100 md:opacity-0">
-                        <!-- 【部署配置】：链接指向 /app2/ -->
                         <a class="project-btn bg-white text-black font-body-md text-label-md px-8 py-3 rounded-full hover:bg-gray-200 transition-colors duration-200 flex items-center gap-2 opacity-100 scale-100 translate-y-0 md:opacity-0 md:scale-90 md:translate-y-10" href="/app2/">
                             访问项目 <span class="material-symbols-outlined" style="font-size: 18px;">arrow_forward</span>
                         </a>
@@ -506,12 +527,15 @@
             </article>
             
             <!-- Card 3 -->
-            <article class="project-card fade-in-up group aspect-[4/5]">
+            <article class="project-card fade-in-up group aspect-video">
                 <div class="project-card-image-container w-full h-full bg-surface-container-high relative">
-                    <!-- 【修复】：替换为建筑主题图片 -->
-                    <img alt="项目三：Gamma Sector 建筑与空间设计" class="project-card-image object-cover w-full h-full absolute inset-0 mix-blend-multiply" src="./assets/img3.jpg">
+                    <!-- 【新增】：展示视频 -->
+                    <video class="project-card-video object-cover w-full h-full absolute inset-0 z-0 opacity-0" muted loop playsinline>
+                        <source src="" type="video/mp4">
+                    </video>
+
+                    <img alt="项目三：Gamma Sector 建筑与空间设计" class="project-card-image object-cover w-full h-full absolute inset-0 mix-blend-multiply z-10" src="./assets/img3.jpg" onerror="this.src='https://placehold.co/800x450/e0dfde/1c1c1a?text=Project+3'">
                     <div class="project-card-overlay opacity-100 md:opacity-0">
-                        <!-- 【部署配置】：链接指向 /app3/ -->
                         <a class="project-btn bg-white text-black font-body-md text-label-md px-8 py-3 rounded-full hover:bg-gray-200 transition-colors duration-200 flex items-center gap-2 opacity-100 scale-100 translate-y-0 md:opacity-0 md:scale-90 md:translate-y-10" href="/app3/">
                             访问项目 <span class="material-symbols-outlined" style="font-size: 18px;">arrow_forward</span>
                         </a>
@@ -523,13 +547,16 @@
                 </div>
             </article>
             
-            <!-- Card 4 (预留给你未来的第4个项目) -->
-            <article class="project-card fade-in-up group aspect-[4/5]">
+            <!-- Card 4 -->
+            <article class="project-card fade-in-up group aspect-video">
                 <div class="project-card-image-container w-full h-full bg-surface-container-high relative">
-                    <!-- 【修复】：替换为基础设施/网络主题图片 -->
-                    <img alt="项目四：Delta Array 基础设施设计" class="project-card-image object-cover w-full h-full absolute inset-0 mix-blend-multiply" src="./assets/img4.jpg">
+                    <!-- 【新增】：展示视频 -->
+                    <video class="project-card-video object-cover w-full h-full absolute inset-0 z-0 opacity-0" muted loop playsinline>
+                        <source src="" type="video/mp4">
+                    </video>
+
+                    <img alt="项目四：Delta Array 基础设施设计" class="project-card-image object-cover w-full h-full absolute inset-0 mix-blend-multiply z-10" src="./assets/img4.jpg" onerror="this.src='https://placehold.co/800x450/e0dfde/1c1c1a?text=Project+4'">
                     <div class="project-card-overlay opacity-100 md:opacity-0">
-                        <!-- 【部署配置】：预留 /app4/ -->
                         <a class="project-btn bg-white text-black font-body-md text-label-md px-8 py-3 rounded-full hover:bg-gray-200 transition-colors duration-200 flex items-center gap-2 opacity-100 scale-100 translate-y-0 md:opacity-0 md:scale-90 md:translate-y-10" href="/app4/">
                             访问项目 <span class="material-symbols-outlined" style="font-size: 18px;">arrow_forward</span>
                         </a>
@@ -553,15 +580,12 @@
     
     <!-- Scripts -->
     <script>
-        // Loader logic — 等所有资源（图片/字体/模型）加载完 + 1.5s
+        // Loader logic
         window.addEventListener('load', () => {
             const loader = document.getElementById('loader');
-            // 页面资源全部加载完成后，再给 1.5s 让用户看到卡片 intro
             setTimeout(() => {
                 loader.classList.add('loader-slide-up');
-                // 触发黑胶 intro 动画
                 triggerVinylIntro();
-                // 滚动淡入动画
                 setTimeout(() => {
                     handleScrollAnimations();
                 }, 500);
@@ -589,7 +613,34 @@
             elements.forEach(el => observer.observe(el));
         }
 
-        // ====== Vinyl Card 3D Tilt（严格复刻 React 源码）======
+        // ====== Video Hover Playback Logic (新增交互逻辑) ======
+        document.querySelectorAll('.project-card').forEach(card => {
+            const video = card.querySelector('.project-card-video');
+            if (video) {
+                // 鼠标移入时尝试播放视频
+                card.addEventListener('mouseenter', () => {
+                    // 判断是否有配置好的视频链接
+                    if (video.currentSrc || video.querySelector('source').src) {
+                        const playPromise = video.play();
+                        if (playPromise !== undefined) {
+                            playPromise.catch(error => {
+                                // 静默处理由于 src 为空产生的报错
+                            });
+                        }
+                    }
+                });
+                
+                // 鼠标移出时暂停并重置视频
+                card.addEventListener('mouseleave', () => {
+                    if (!video.paused) {
+                        video.pause();
+                        video.currentTime = 0; // 重置视频回到起点
+                    }
+                });
+            }
+        });
+
+        // ====== Vinyl Card 3D Tilt ======
         (function() {
             const card = document.getElementById('vinylCard');
             if (!card) return;
@@ -609,7 +660,6 @@
             updateCenter();
             window.addEventListener('resize', updateCenter);
 
-            // 复刻源码 rotate 函数
             function rotate(cursorPosition, centerPosition, threshold) {
                 threshold = threshold || 20;
                 var delta = cursorPosition - centerPosition;
@@ -617,21 +667,16 @@
                     ? (delta >= threshold ? threshold : delta)
                     : (delta <= -threshold ? -threshold : delta);
             }
-            // 复刻源码 brightness 函数
             function brightness(cursorPositionY, centerPositionY, strength) {
                 strength = strength || 20;
                 return 1 - rotate(cursorPositionY, centerPositionY) / strength * 0.05;
             }
 
-            // Intro 由遮屏动画结束后调用 — 唱片直接以 hover 展开态出场，再收回静止态
             window.triggerVinylIntro = function() {
                 if (!disc) return;
-                // 关闭过渡，瞬间设为展开态（hover 态）
                 disc.style.transition = 'none';
                 disc.style.transform = 'translate(160px, 0px) rotate(30deg)';
-                // 强制浏览器重排，确保上一条生效
                 disc.offsetHeight;
-                // 恢复过渡，准备收回
                 disc.style.transition = '';
                 setTimeout(function() {
                     if (!isHovering) {
@@ -649,7 +694,6 @@
             card.addEventListener('mouseleave', function() {
                 isHovering = false;
                 if (!introDone) return;
-                // 复刻 handleMouseLeave
                 card.style.transform = 'perspective(1000px) rotateY(0deg) rotateX(0deg) scale(1)';
                 card.style.filter = 'brightness(1) drop-shadow(0 10px 20px rgba(0,0,0,.05))';
                 card.style.boxShadow = '0 0 0 0 rgba(0,0,0,0)';
@@ -663,7 +707,6 @@
 
             card.addEventListener('mousemove', function(e) {
                 if (!introDone) return;
-                // 复刻 handleMouseMove — 完全一致的公式
                 var calcX = rotate(e.clientX, centerX, 15);
                 var calcY = rotate(e.clientY, centerY, 15);
                 var calcX2 = e.clientX - centerX;
@@ -673,12 +716,9 @@
                 card.style.filter = 'brightness(' + brightness(e.clientY, centerY, 30) + ')';
                 card.style.boxShadow = (-calcX*1.5) + 'px ' + (-calcY*1.5) + 'px 30px rgba(0,0,0,.08)';
 
-                // 黑胶：160px 基础偏移 + 鼠标视差
                 disc.style.transform = 'translate(' + (calcX2/10 + 160) + 'px, ' + (calcY2/15) + 'px) rotate(' + (calcX2/4) + 'deg)';
-                // 封面
                 cover.style.transform = 'translate(' + (calcX2/20) + 'px, ' + (calcY2/20) + 'px)';
                 cover.style.filter = 'drop-shadow(' + (-calcX) + 'px ' + (-calcY) + 'px 15px rgba(0,0,0,.1))';
-                // 徽章 + 标题
                 badge.style.transform = 'translate(' + (calcX2/8) + 'px, ' + (calcY2/12) + 'px)';
                 title.style.transform = 'translate(' + (calcX2/8) + 'px, ' + (calcY2/12) + 'px)';
                 if (bgGlow) bgGlow.style.transform = 'translate(' + (calcX2/20) + 'px, ' + (calcY2/20) + 'px)';
