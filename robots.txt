@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://cjw32.xyz/sitemap.xml
+Sitemap: https://cjw32.xyz/blog/sitemap-index.xml
