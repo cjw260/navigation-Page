@@ -2,6 +2,14 @@ services:
   web:
     image: ${WEB_IMAGE:?Missing immutable web image}
     ports: ["127.0.0.1:18080:8080"]
+    depends_on:
+      admin: {condition: service_healthy}
+    volumes:
+      - type: bind
+        source: /opt/cjw-sites/navigation-page/data/admin/public
+        target: /data/public
+        read_only: true
+        bind: {create_host_path: false}
     mem_limit: 96m
     cpus: 0.5
     restart: unless-stopped
@@ -13,3 +21,24 @@ services:
     logging:
       driver: json-file
       options: {max-size: "10m", max-file: "3"}
+  admin:
+    image: ${ADMIN_IMAGE:?Missing immutable admin image}
+    environment:
+      PUBLIC_ORIGIN: https://cjw32.xyz
+      DATA_DIR: /data
+    volumes:
+      - type: bind
+        source: /opt/cjw-sites/navigation-page/data/admin
+        target: /data
+        bind: {create_host_path: false}
+    mem_limit: 384m
+    cpus: 0.75
+    restart: unless-stopped
+    read_only: true
+    tmpfs: [/tmp:size=64m]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    pids_limit: 64
+    logging:
+      driver: json-file
+      options: {max-size: "5m", max-file: "3"}

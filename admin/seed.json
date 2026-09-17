@@ -1,0 +1,38 @@
+[
+  {
+    "id": "en",
+    "title": "AI英语学习平台",
+    "subtitle": "I. AI LEARNING",
+    "url": "/en/",
+    "cover": "/assets/en_img.png",
+    "video": "/assets/previews/en_video.3f19727c75bf.mp4",
+    "visible": true
+  },
+  {
+    "id": "work",
+    "title": "协同思维导图",
+    "subtitle": "II. COLLAB",
+    "url": "/work/",
+    "cover": "/assets/work_img.png",
+    "video": "/assets/previews/work_video.4783c4bf7938.mp4",
+    "visible": true
+  },
+  {
+    "id": "tool",
+    "title": "协同表格工具",
+    "subtitle": "III. TOOLS",
+    "url": "/tool/",
+    "cover": "/assets/tool_img.png",
+    "video": "/assets/previews/tool_video.c7c741895ee6.mp4",
+    "visible": true
+  },
+  {
+    "id": "blog",
+    "title": "个人博客",
+    "subtitle": "IV. BLOG",
+    "url": "/blog/",
+    "cover": "/assets/blog_img.png",
+    "video": "/assets/previews/blog_video.db53ccb757d7.mp4",
+    "visible": true
+  }
+]

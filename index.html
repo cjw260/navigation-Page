@@ -167,14 +167,12 @@
             transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s ease;
         }
 
-        /* Hover时：底图透明消失，视频出现并播放 */
-        .project-card:hover .project-card-image,
-        .project-card:active .project-card-image {
+        /* Only reveal a preview after the video emits playing. */
+        .project-card.is-preview-playing .project-card-image {
             opacity: 0;
         }
 
-        .project-card:hover .project-card-video,
-        .project-card:active .project-card-video {
+        .project-card.is-preview-playing .project-card-video {
             opacity: 1;
         }
 
@@ -490,15 +488,14 @@
         <!-- Project Grid -->
         <!-- 【修改】：将 md:grid-cols-3 改为 md:grid-cols-2（一排两个卡片） -->
         <section class="grid grid-cols-1 gap-gutter mb-32 md:grid-cols-2">
+            <!-- PROJECT_CARDS_START -->
             <!-- Card 1: English Learning -->
             <!-- 【修改】：将 aspect-[4/5] 改为 aspect-video (16:9 标准比例) -->
             <article class="project-card fade-in-up group aspect-video">
                 <div class="project-card-image-container w-full h-full bg-surface-container-high relative">
                     <a class="card-link" href="/en/"></a>
                     <!-- 【新增】：展示视频，默认透明度为0，悬浮时播放 -->
-                    <video class="project-card-video object-cover w-full h-full absolute inset-0 z-0 opacity-0" muted loop playsinline>
-                        <source src="./assets/en_video.mp4" type="video/mp4">
-                    </video>
+                    <video class="project-card-video object-cover w-full h-full absolute inset-0 z-0 opacity-0" muted loop playsinline preload="none" data-preview="/assets/previews/en_video.3f19727c75bf.mp4" aria-hidden="true"></video>
                     
                     <!-- 原预览底图 -->
                     <img alt="AI英语学习平台" class="project-card-image object-cover w-full h-full absolute inset-0 mix-blend-multiply z-10" src="./assets/en_img.png" onerror="this.src='https://placehold.co/800x450/e0dfde/1c1c1a?text=Project+1'">
@@ -520,9 +517,7 @@
                 <div class="project-card-image-container w-full h-full bg-surface-container-high relative">
                     <a class="card-link" href="/work/"></a>
                     <!-- 【新增】：展示视频 -->
-                    <video class="project-card-video object-cover w-full h-full absolute inset-0 z-0 opacity-0" muted loop playsinline>
-                        <source src="./assets/work_video.mp4" type="video/mp4">
-                    </video>
+                    <video class="project-card-video object-cover w-full h-full absolute inset-0 z-0 opacity-0" muted loop playsinline preload="none" data-preview="/assets/previews/work_video.4783c4bf7938.mp4" aria-hidden="true"></video>
 
                     <img alt="协同思维导图编辑平台" class="project-card-image object-cover w-full h-full absolute inset-0 mix-blend-multiply z-10" src="./assets/work_img.png" onerror="this.src='https://placehold.co/800x450/e0dfde/1c1c1a?text=MindMap'">
                     <div class="project-card-overlay opacity-100 md:opacity-0">
@@ -542,9 +537,7 @@
                 <div class="project-card-image-container w-full h-full bg-surface-container-high relative">
                     <a class="card-link" href="/tool/"></a>
                     <!-- 【新增】：展示视频 -->
-                    <video class="project-card-video object-cover w-full h-full absolute inset-0 z-0 opacity-0" muted loop playsinline>
-                        <source src="./assets/tool_video.mp4" type="video/mp4">
-                    </video>
+                    <video class="project-card-video object-cover w-full h-full absolute inset-0 z-0 opacity-0" muted loop playsinline preload="none" data-preview="/assets/previews/tool_video.c7c741895ee6.mp4" aria-hidden="true"></video>
 
                     <img alt="协同表格工具" class="project-card-image object-cover w-full h-full absolute inset-0 mix-blend-multiply z-10" src="./assets/tool_img.png" onerror="this.src='https://placehold.co/800x450/e0dfde/1c1c1a?text=Project+3'">
                     <div class="project-card-overlay opacity-100 md:opacity-0">
@@ -565,9 +558,7 @@
                     <!-- 整卡可点击链接 -->
                     <a class="card-link" href="/blog/"></a>
                     <!-- 【新增】：展示视频 -->
-                    <video class="project-card-video object-cover w-full h-full absolute inset-0 z-0 opacity-0" muted loop playsinline>
-                        <source src="./assets/blog_video.mp4" type="video/mp4">
-                    </video>
+                    <video class="project-card-video object-cover w-full h-full absolute inset-0 z-0 opacity-0" muted loop playsinline preload="none" data-preview="/assets/previews/blog_video.db53ccb757d7.mp4" aria-hidden="true"></video>
 
                     <img alt="个人博客" class="project-card-image object-cover w-full h-full absolute inset-0 mix-blend-multiply z-10" src="./assets/blog_img.png" onerror="this.src='https://placehold.co/800x450/e0dfde/1c1c1a?text=Blog'">
                     <div class="project-card-overlay opacity-100 md:opacity-0">
@@ -581,6 +572,7 @@
                     </div>
                 </div>
             </article>
+            <!-- PROJECT_CARDS_END -->
         </section>
     </main>
     
@@ -593,6 +585,7 @@
     </footer>
     
     <!-- Scripts -->
+    <script type="module" src="/assets/project-previews.mjs"></script>
     <script>
         // Loader logic
         window.addEventListener('load', () => {
@@ -626,33 +619,6 @@
             const elements = document.querySelectorAll('.fade-in-up');
             elements.forEach(el => observer.observe(el));
         }
-
-        // ====== Video Hover Playback Logic (新增交互逻辑) ======
-        document.querySelectorAll('.project-card').forEach(card => {
-            const video = card.querySelector('.project-card-video');
-            if (video) {
-                // 鼠标移入时尝试播放视频
-                card.addEventListener('mouseenter', () => {
-                    // 判断是否有配置好的视频链接
-                    if (video.currentSrc || video.querySelector('source').src) {
-                        const playPromise = video.play();
-                        if (playPromise !== undefined) {
-                            playPromise.catch(error => {
-                                // 静默处理由于 src 为空产生的报错
-                            });
-                        }
-                    }
-                });
-                
-                // 鼠标移出时暂停并重置视频
-                card.addEventListener('mouseleave', () => {
-                    if (!video.paused) {
-                        video.pause();
-                        video.currentTime = 0; // 重置视频回到起点
-                    }
-                });
-            }
-        });
 
         // ====== Vinyl Card 3D Tilt ======
         (function() {
