@@ -38,6 +38,8 @@ docker exec -it cjw-navigation-page-admin-1 python /app/admin/set_password.py
 
 CI 运行测试与密钥检查，分别构建 web/admin 镜像，用 digest 部署。失败恢复上一应用版本。回滚不会清除业务数据；若需恢复历史项目内容，管理员应先备份现有 SQLite，再从私有 JSON 备份恢复为草稿、预览并发布，勿直接覆盖在线数据库。
 
+首次拉取过慢时，可从相同构建的 GHCR digest 下载完整 OCI 镜像，中转至服务器并校验包摘要后导入。确认 `images.env` 中的两个精确 digest 均可被 `docker image inspect` 找到，再运行对应 release 的 `bash deploy.sh cjw260 --offline`。离线模式仅跳过登录和下载，仍校验镜像来源及 digest、使用部署锁、备份数据、检查健康并保留回滚。不要用随意打的本地标签代替发布清单，也不要并行启动两个发布进程。
+
 反向代理需要允许 `/navigation-admin/` 请求和至少 40 MiB 请求体，上传/转码等待至少 120 秒。后台路由禁止索引、要求登录和同源 CSRF 校验；公开媒体支持缓存和 Range 请求。
 
 ## 本地验证

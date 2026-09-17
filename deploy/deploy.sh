@@ -6,7 +6,9 @@ APP=navigation-page
 APP_ROOT="/opt/cjw-sites/$APP"
 RELEASE_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
 ACTOR="${1:?GitHub actor required}"
+MODE="${2:-online}"
 [[ "$ACTOR" =~ ^[A-Za-z0-9-]+$ ]] || exit 2
+[[ "$MODE" == online || "$MODE" == --offline ]] || exit 2
 [[ "$RELEASE_DIR" == "$APP_ROOT/releases/"* ]] || exit 2
 [[ -f "$APP_ROOT/READY" ]] || { echo 'Initial server setup is not complete.' >&2; exit 2; }
 exec 9>"$APP_ROOT/deploy.lock"
@@ -28,10 +30,12 @@ if set(found) != set(expected):
 PY
 previous=''
 if [[ -L "$APP_ROOT/current" ]]; then previous="$(readlink -f "$APP_ROOT/current")"; fi
-registry_auth="$(mktemp -d)"
-export DOCKER_CONFIG="$registry_auth"
-trap 'rm -rf -- "$registry_auth"' EXIT
-docker login ghcr.io --username "$ACTOR" --password-stdin >/dev/null
+if [[ "$MODE" == online ]]; then
+  registry_auth="$(mktemp -d)"
+  export DOCKER_CONFIG="$registry_auth"
+  trap 'rm -rf -- "$registry_auth"' EXIT
+  docker login ghcr.io --username "$ACTOR" --password-stdin >/dev/null
+fi
 compose() {
   local release="$1"; shift
   docker compose --project-name "cjw-$APP" --env-file "$release/images.env" -f "$release/compose.yaml" "$@"
@@ -52,7 +56,14 @@ if db.exists():
 PYBACKUP
 # Resolve and pull every image before touching existing application containers.
 compose "$RELEASE_DIR" config --quiet
-compose "$RELEASE_DIR" pull --policy always
+if [[ "$MODE" == --offline ]]; then
+  # Only immutable, repository-validated images from this exact release qualify.
+  while IFS='=' read -r key image; do
+    docker image inspect "$image" >/dev/null
+  done < "$RELEASE_DIR/images.env"
+else
+  compose "$RELEASE_DIR" pull --policy always
+fi
 if compose "$RELEASE_DIR" up -d --wait --wait-timeout 120 --pull never; then
   if [[ -n "$previous" && "$previous" != "$RELEASE_DIR" ]]; then
     ln -sfn "$previous" "$APP_ROOT/previous.next"
