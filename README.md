@@ -42,6 +42,12 @@ CI 运行测试与密钥检查，分别构建 web/admin 镜像，用 digest 部�
 
 反向代理需要允许 `/navigation-admin/` 请求和至少 40 MiB 请求体，上传/转码等待至少 120 秒。后台路由禁止索引、要求登录和同源 CSRF 校验；公开媒体支持缓存和 Range 请求。
 
+## 链接解码工具
+
+`/decode/` 提供单文件 `decode/index.html`。支持完整网址的 `cc` 参数、Base64/Base64URL、UTF-8 文本和 JSON `link` 字段。浏览器本地处理，不请求目标网站、不保存输入、不自动跳转；仅允许无内嵌凭证的 HTTP/HTTPS 目标地址。可复制或手动打开，完整内容以纯文本显示。页面随 web 镜像发布，不需要增加容器、端口或数据库；单文件也可直接下载离线使用。
+
+解码测试：`node --test tests/decode.test.mjs`。
+
 ## 本地验证
 
 ```sh

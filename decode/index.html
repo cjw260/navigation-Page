@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="在浏览器本地解析 cc 参数和 Base64，提取目标链接。无需登录，不上传输入。">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'none'; img-src 'none'; base-uri 'none'; form-action 'none'">
+<title>链接解码 · CJW</title>
+<style>
+:root{color-scheme:light;--paper:#f6f5ef;--ink:#23352e;--muted:#647169;--line:#d5dcd3;--accent:#275b43}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:"Segoe UI","Microsoft YaHei",sans-serif;line-height:1.65}main{max-width:900px;margin:auto;padding:36px 24px 64px}header{display:flex;justify-content:space-between;align-items:center;padding-bottom:20px;border-bottom:1px solid var(--line);font-size:14px}header a{color:var(--ink);text-decoration:none}.privacy{color:var(--accent)}h1{font-size:clamp(34px,6vw,54px);line-height:1.2;letter-spacing:-2px;margin:55px 0 16px;font-weight:650}.intro{color:var(--muted);margin:0 0 32px;max-width:600px}label{display:block;font-size:15px;font-weight:600;margin-bottom:10px}textarea{width:100%;min-height:165px;resize:vertical;border:1px solid #acb9ae;border-radius:10px;padding:18px;background:#fdfdf9;color:var(--ink);font:14px/1.7 Consolas,"Microsoft YaHei",monospace;overflow-wrap:anywhere}textarea:focus{outline:3px solid #bad5bc;outline-offset:3px;border-color:var(--accent)}button,.open{font:inherit;border:1px solid var(--line);background:transparent;color:var(--ink);padding:10px 19px;border-radius:7px;cursor:pointer;min-height:46px;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}button:hover,.open:hover{background:#e8ede4}button:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid #739b7b;outline-offset:3px}.primary{background:var(--accent);border-color:var(--accent);color:#f7faf5}.primary:hover{background:#194b33}.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}.hint{font-size:13px;color:var(--muted);margin:12px 0 0}.status{min-height:27px;margin:18px 0;color:var(--muted)}.status.error{color:#a5352b}.result{border-top:1px solid var(--line);padding-top:28px;margin-top:18px}.eyebrow{font-size:12px;letter-spacing:2px;color:var(--muted)}h2{font-size:23px;margin:4px 0 14px}.destination{display:block;padding:18px;background:#e7eee3;border-radius:8px;overflow-wrap:anywhere;color:#214932;font:15px/1.7 Consolas,monospace;white-space:pre-wrap}.host{font-size:14px;color:var(--muted);overflow-wrap:anywhere}.open{background:var(--accent);color:#f7faf5;border-color:var(--accent)}.open:hover{background:#194b33}details{margin-top:24px}summary{cursor:pointer;color:var(--muted);font-size:14px}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#eeeee6;padding:18px;border-radius:8px;font-size:13px;max-height:360px;overflow:auto}.notes{margin-top:46px;padding-top:22px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}.notes p{margin:6px 0}[hidden]{display:none!important}@media(max-width:540px){main{padding:22px 18px 40px}h1{margin-top:38px}.privacy{font-size:12px}.actions button,.actions a{flex:1}.actions .primary{flex-basis:100%}textarea{min-height:190px}header{font-size:13px}}
+</style>
+</head>
+<body>
+<main>
+<header><a href="/">CJW / 小工具</a><span class="privacy">● 仅在本机浏览器处理</span></header>
+<h1>把链接，还原成链接。</h1>
+<p class="intro">粘贴带有 <code>cc</code> 参数的网址，或一段 Base64 编码。解码后直接查看其中的目标地址。</p>
+<form id="decode-form">
+<label for="input">网址或 Base64 编码</label>
+<textarea id="input" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="https://example.com/t?cc=eyJsaW5rIjo…" maxlength="200000" aria-describedby="input-hint"></textarea>
+<div class="actions"><button class="primary" type="submit">解码链接 ↗</button><button id="example" type="button">试试示例</button><button id="clear" type="button">清空</button></div>
+<p id="input-hint" class="hint">支持标准 Base64、Base64URL、UTF-8 中文。Ctrl / ⌘ + Enter 快速解码。</p>
+</form>
+<p id="status" class="status" role="status" aria-live="polite"></p>
+<section id="result" class="result" hidden aria-labelledby="result-heading">
+<div class="eyebrow">DECODED RESULT</div><h2 id="result-heading">解码结果</h2>
+<div id="link-result" hidden><code id="destination" class="destination"></code><p id="host" class="host"></p><div class="actions"><button id="copy" type="button">复制目标地址</button><a id="open" class="open" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer">打开目标页面 ↗</a></div><p class="hint">请先确认域名。解码只还原编码内容，不代表目标网站可信或可访问。</p></div>
+<details id="raw-details"><summary>查看完整解码内容</summary><pre id="raw"></pre></details>
+</section>
+<footer class="notes"><p>输入内容不会发送到服务器，也不会保存到浏览器历史记录或本地存储。</p><p>这不是通用解锁工具：仅解析链接中已有的编码信息，不绕过登录、付费或访问权限。</p></footer>
+</main>
+<script>
+'use strict';
+// Pure decoding functions; no requests, storage or dynamic code execution.
+function decodeBase64(value) {
+  let encoded = value.trim();
+  if (encoded.includes('%')) {
+    try { encoded = decodeURIComponent(encoded); } catch { throw new Error('编码中存在无效的百分号转义。'); }
+  }
+  encoded = encoded.replace(/\s/g, '').replace(/-/g, '+').replace(/_/g, '/');
+  if (!encoded || !/^[A-Za-z0-9+/]*={0,2}$/.test(encoded) || encoded.length % 4 === 1) throw new Error('不是有效的 Base64 编码，请检查是否复制完整。');
+  let bytes;
+  try { bytes = Uint8Array.from(atob(encoded), c => c.charCodeAt(0)); } catch { throw new Error('Base64 解码失败，请检查编码是否完整。'); }
+  try { return new TextDecoder('utf-8', {fatal:true}).decode(bytes); } catch { throw new Error('解码结果不是 UTF-8 文本，可能是二进制数据。'); }
+}
+function safeWebURL(value) {
+  if (typeof value !== 'string' || !/^https?:\/\//i.test(value.trim())) return null;
+  try { const url = new URL(value.trim()); return ['http:','https:'].includes(url.protocol) && !url.username && !url.password ? url.href : null; } catch { return null; }
+}
+function decodeInput(value) {
+  const input = value.trim();
+  if (!input) throw new Error('请先粘贴网址或 Base64 编码。');
+  if (input.length > 200000) throw new Error('输入过长，请控制在 200,000 个字符以内。');
+  let encoded = input;
+  if (/^https?:\/\//i.test(input)) {
+    let url;
+    try { url = new URL(input); } catch { throw new Error('网址格式不正确。'); }
+    // URLSearchParams turns literal + into spaces. Restore + for Base64 values.
+    encoded = url.searchParams.get('cc');
+    if (!encoded) throw new Error('这个网址没有 cc 参数，请粘贴包含 cc 的完整链接，或直接粘贴 Base64 编码。');
+    encoded = encoded.replace(/ /g, '+');
+  }
+  const text = decodeBase64(encoded);
+  let parsed;
+  try { parsed = JSON.parse(text); } catch { parsed = undefined; }
+  const candidate = parsed && typeof parsed === 'object' ? parsed.link : typeof parsed === 'string' ? parsed : text;
+  return {text, formatted: parsed === undefined ? text : JSON.stringify(parsed,null,2), link:safeWebURL(candidate)};
+}
+// UI renders untrusted decoded content as text only.
+const $ = id => document.getElementById(id);
+let currentLink = '';
+function status(message, error=false) { $('status').textContent=message; $('status').classList.toggle('error',error); }
+function resetResult() { currentLink=''; $('result').hidden=true; $('link-result').hidden=true; $('open').removeAttribute('href'); $('raw').textContent=''; $('destination').textContent=''; $('host').textContent=''; }
+function run() {
+  resetResult();
+  try {
+    const decoded = decodeInput($('input').value);
+    $('raw').textContent=decoded.formatted; $('result').hidden=false;
+    $('raw-details').open=!decoded.link;
+    if (decoded.link) {
+      currentLink=decoded.link; $('destination').textContent=currentLink; $('open').href=currentLink; $('host').textContent='目标域名：'+new URL(currentLink).hostname; $('link-result').hidden=false;
+      status('解码成功，请查看下方目标地址。');
+    } else status('解码成功，但没有找到可打开的 HTTP / HTTPS 目标地址，请查看完整内容。');
+  } catch(error) { status(error.message,true); }
+}
+$('decode-form').addEventListener('submit',event=>{event.preventDefault();run();});
+$('input').addEventListener('input',()=>{resetResult();status('');});
+$('input').addEventListener('keydown',event=>{if((event.ctrlKey||event.metaKey)&&event.key==='Enter'){event.preventDefault();run();}});
+$('example').addEventListener('click',()=>{$('input').value='https://example.com/t?cc='+btoa(JSON.stringify({title:'Example',link:'https://example.com/'}));run();});
+$('clear').addEventListener('click',()=>{$('input').value='';resetResult();status('');$('input').focus();});
+$('copy').addEventListener('click',async()=>{
+  if(!currentLink)return;
+  try { await navigator.clipboard.writeText(currentLink); status('目标地址已复制。'); } catch { status('浏览器未允许复制，请选中上方目标地址手动复制。',true); }
+});
+</script>
+</body>
+</html>

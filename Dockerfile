@@ -2,6 +2,7 @@ FROM nginx:1.28.0-alpine@sha256:30f1c0d78e0ad60901648be663a710bdadf19e4c10ac6782
 COPY deploy/nginx.conf /etc/nginx/nginx.conf
 COPY index.html /usr/share/nginx/html/index.html
 COPY assets /usr/share/nginx/html/assets
+COPY decode /usr/share/nginx/html/decode
 COPY robots.txt sitemap.xml /usr/share/nginx/html/
 RUN nginx -t
 USER nginx

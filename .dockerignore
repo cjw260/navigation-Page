@@ -5,6 +5,8 @@
 !sitemap.xml
 !assets/
 !assets/**
+!decode/
+!decode/**
 !admin/
 !admin/**
 !deploy/
