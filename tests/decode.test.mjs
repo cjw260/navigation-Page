@@ -45,3 +45,7 @@ test('UI text rendering, stale result invalidation, example and clear',()=>{
 test('no external assets, persistence, requests or HTML interpolation',()=>{
  assert.doesNotMatch(html,/<script[^>]+src=|<link[^>]+href=|\bfetch\s*\(|XMLHttpRequest|localStorage|sessionStorage|innerHTML\s*=/i);assert.match(html,/connect-src 'none'/);
 });
+test('slashless route serves the page without leaking internal proxy port',()=>{
+ const nginx=fs.readFileSync(new URL('../deploy/nginx.conf',import.meta.url),'utf8');
+ assert.match(nginx,/location = \/decode \{ try_files \/decode\/index\.html =404; \}/);
+});
